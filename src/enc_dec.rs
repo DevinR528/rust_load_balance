@@ -42,30 +42,30 @@ impl JsonCodec {
 }
 
 impl Decoder for JsonCodec {
-    type Item = JsonMsg;
-    type Error = Error;
+    type Item = BytesMut;
+    type Error = io::Error;
 
-    fn decode(&mut self, src: &mut BytesMut)
-        -> Result<Option<Self::Item>, Self::Error>
-    {
-        let j_str = String::from_utf8_lossy(src);
-        println!("{}", j_str);
-        let res = serde_json::from_slice::<JsonMsg>(src)?;
-        Ok(Some(res))
+    fn decode(&mut self, src: &mut BytesMut) -> Result<Option<Self::Item>, Self::Error> {
+        //        let raw_str = String::from_utf8_lossy(src);
+        //        println!("{}", raw_str);
+        //let res = serde_json::from_slice::<JsonMsg>(src)?;
+        Ok(Some(src.to_owned()))
     }
 }
 
+// writes out, this is sink
 impl Encoder for JsonCodec {
-    type Item = JsonMsg;
-    type Error = Error;
+    type Item = BytesMut;
+    type Error = io::Error;
 
-    fn encode(
-        &mut self,
-        item: Self::Item,
-        dst: &mut BytesMut
-    ) -> Result<(), Self::Error> {
-        let j_str = serde_json::to_string(&item)?;
+    fn encode(&mut self, item: Self::Item, dst: &mut BytesMut) -> Result<(), Self::Error> {
+        let raw_str = String::from_utf8_lossy(&item);
+        let mut json_msg = serde_json::from_str::<JsonMsg>(&raw_str)?;
 
+        json_msg.item += 1;
+
+        println!("{:#?}", json_msg);
+        let j_str = serde_json::to_string(&json_msg)?;
         dst.extend_from_slice(j_str.as_bytes());
         Ok(())
     }

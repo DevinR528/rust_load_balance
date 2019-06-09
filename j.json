@@ -1,5 +1,1 @@
-{
-  "item": 1,
-  "name": "me",
-  "hello": "from rust"
-}
+{"item": 1, "name": "me", "hello": "from rust"}
