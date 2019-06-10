@@ -13,12 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96f87c31-534f-4a4c-b165-75f98eeb144d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/j.json" beforeDir="false" afterPath="$PROJECT_DIR$/j.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/enc_dec.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/enc_dec.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,46 +26,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.rs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="564">
-              <caret line="249" selection-start-line="249" selection-end-line="249" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitattributes">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Cargo.toml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-0.4.12/src/bytes.rs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="1444" selection-start-line="1444" selection-end-line="1444" />
+            <state relative-caret-position="2800">
+              <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
               <folding>
-                <element signature="e#42868#42869#0" expanded="true" />
+                <element signature="e#5486#5487#0" expanded="true" />
+                <element signature="e#5517#5518#0" expanded="true" />
+                <element signature="e#5805#5806#0" expanded="true" />
+                <element signature="e#5840#5841#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-io-0.1.12/src/_tokio_codec/framed_write.rs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="338">
+              <caret line="213" column="18" lean-forward="true" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -78,8 +53,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/enc_dec.rs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="664">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
+              <folding>
+                <element signature="e#1931#1932#0" expanded="true" />
+                <element signature="e#1966#1967#0" expanded="true" />
+                <element signature="e#2176#2177#0" expanded="true" />
+                <element signature="e#2203#2204#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-io-0.1.12/src/split.rs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-0.1.27/src/sink/mod.rs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="688">
+              <caret line="178" column="17" selection-start-line="178" selection-start-column="17" selection-end-line="178" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -101,9 +100,9 @@
       <list>
         <option value="$PROJECT_DIR$/Cargo.toml" />
         <option value="$PROJECT_DIR$/j.json" />
-        <option value="$PROJECT_DIR$/src/enc_dec.rs" />
-        <option value="$PROJECT_DIR$/src/main.rs" />
         <option value="$PROJECT_DIR$/.gitattributes" />
+        <option value="$PROJECT_DIR$/src/main.rs" />
+        <option value="$PROJECT_DIR$/src/enc_dec.rs" />
       </list>
     </option>
   </component>
@@ -114,7 +113,7 @@
     <option name="x" value="993" />
     <option name="y" value="25" />
     <option name="width" value="927" />
-    <option name="height" value="1053" />
+    <option name="height" value="1055" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -164,7 +163,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Cargo Command.test">
+  <component name="RunManager" selected="Cargo Command.run-s">
     <configuration name="Test tests::test_read_buffer" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="test --package streams --bin streams tests::test_read_buffer -- --exact" />
@@ -268,8 +267,23 @@
       <workItem from="1559994636867" duration="4643000" />
       <workItem from="1559999300209" duration="1914000" />
       <workItem from="1560029266269" duration="10503000" />
-      <workItem from="1560076953742" duration="8393000" />
+      <workItem from="1560076953742" duration="22883000" />
     </task>
+    <task id="LOCAL-00001" summary="starting">
+      <created>1560085926995</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1560085926995</updated>
+    </task>
+    <task id="LOCAL-00002" summary="start work on load balancing">
+      <created>1560207876161</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1560207876161</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -305,25 +319,24 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52187000" />
+    <option name="totallyTimeSpent" value="66677000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="993" y="25" width="927" height="1053" extended-state="4" />
-    <editor active="true" />
+    <frame x="993" y="25" width="927" height="1055" extended-state="4" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17934166" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32792208" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.45909092" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3982684" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32900432" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32900432" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -335,30 +348,13 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="starting" />
+    <MESSAGE value="start work on load balancing" />
+    <option name="LAST_COMMIT_MESSAGE" value="start work on load balancing" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>67</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>72</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>157</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>248</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint enabled="true" type="CidrExceptionBreakpoint">
           <properties />
@@ -572,13 +568,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/enc_dec.rs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/bytes-0.4.12/src/bytes.rs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -596,20 +585,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.rs">
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="564">
-          <caret line="249" selection-start-line="249" selection-end-line="249" />
+        <state relative-caret-position="42">
+          <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-0.1.27/src/poll.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-336">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/mio-0.6.19/src/sys/unix/uio.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="14" column="40" selection-start-line="14" selection-start-column="40" selection-end-line="14" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/lib.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="55" column="11" selection-start-line="55" selection-start-column="11" selection-end-line="55" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitattributes">
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-io-0.1.12/src/split.rs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+        <state>
+          <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-0.1.27/src/sink/mod.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="688">
+          <caret line="178" column="17" selection-start-line="178" selection-start-column="17" selection-end-line="178" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/tokio-io-0.1.12/src/_tokio_codec/framed_write.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="213" column="18" lean-forward="true" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/enc_dec.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="664">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+          <folding>
+            <element signature="e#1931#1932#0" expanded="true" />
+            <element signature="e#1966#1967#0" expanded="true" />
+            <element signature="e#2176#2177#0" expanded="true" />
+            <element signature="e#2203#2204#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.rs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2800">
+          <caret line="224" column="28" lean-forward="true" selection-start-line="224" selection-start-column="28" selection-end-line="224" selection-end-column="28" />
+          <folding>
+            <element signature="e#5486#5487#0" expanded="true" />
+            <element signature="e#5517#5518#0" expanded="true" />
+            <element signature="e#5805#5806#0" expanded="true" />
+            <element signature="e#5840#5841#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
