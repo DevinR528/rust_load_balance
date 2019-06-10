@@ -19,6 +19,8 @@ use bytes::{ BufMut, BytesMut };
 use core::borrow::BorrowMut;
 
 mod enc_dec;
+use crate::enc_dec::JsonCodec;
+use crate::enc_dec::JsonMsg;
 
 fn main() {
     let addr = "127.0.0.1:3030".parse::<SocketAddr>().unwrap();
@@ -42,38 +44,42 @@ fn main() {
 }
 
 fn process(sock: TcpStream) {
-    let mut buf = vec![];
+    let mut buf: Vec<u8> = vec![];
     let rw_async = ReadWrite::new(sock);
+
+
     // return val from and_then x2
     let async_resp = tokio::fs::File::open("j.json")
         .and_then(move |mut file| {
             file.read_buf(&mut buf)
                 .and_then(|_f| {
 
+                    let header = format!(
+                        "HTTP/1.1 200 OK\r\n{}{}",
+                        format!("Content-Length: {}\r\n", buf.len()),
+                        "Content-Type: application/json\r\n\r\n",
+                    );
                     let content = String::from_utf8_lossy(&buf);
-                    println!("{}", content);
 
-                    let header = "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: application/json\r\n\r\n";
                     let resp = format!("{}{}", header, content);
-                    // returns futrue of string response
+                    // returns future of string response
                     Ok(resp)
                 })
         })
-        .map_err(|e| eprintln!("{}", e));
+        .map_err(|e| eprintln!("File Open Error: {}", e));
 
     let conn = rw_async.into_future()
         .map_err(|(e, _)| e)
         .and_then(|(req, mut stream)| {
 
             let get = req.clone().expect("No request found");
-            println!("{}", String::from_utf8_lossy(req.unwrap().as_ref()));
+
+            println!("Request: {}", String::from_utf8_lossy(req.unwrap().as_ref()));
+
             if get.starts_with(b"GET / HTTP/1.1") {
-
                 let resp = async_resp.wait();
-                stream.buffer(resp.unwrap().as_bytes());
-
-                println!("{}", String::from_utf8_lossy(stream.wr.as_ref()));
-
+                stream.buffer_u8(resp.unwrap().as_bytes());
+                stream.poll_flush()?;
             }
 
             Ok(())
@@ -99,14 +105,14 @@ impl ReadWrite {
         }
     }
 
-    /// Buffer adds to write half of ReadWrite
+    /// Buffer u8 adds to write half of ReadWrite
     ///
     /// # Examples
     /// ```
     /// use bytes::BufMut;
     ///
     /// let rw = ReadWrite::new(TcpStream);
-    /// rw.buffer(b"123".as_ref());
+    /// rw.buffer_u8(b"123".as_ref());
     ///
     /// let b_m = BytesMut::new();
     /// b_m.reserve(3);
@@ -114,7 +120,7 @@ impl ReadWrite {
     ///
     /// assert_eq!(b_m, rw.rd);
     /// ```
-    fn buffer(&mut self, line: &[u8]) {
+    fn buffer_u8(&mut self, line: &[u8]) {
         self.wr.reserve(line.len());
 
         self.wr.put(line);
@@ -149,9 +155,15 @@ impl ReadWrite {
     /// zero bytes read.
     ///
     /// # Examples
-    /// ```
-    /// use bytes::BufMut;
-    ///
+    /// ```                         calls fill_read_buf
+    /// let f = ReadWrite::new(sock).into_future()
+    ///     .map_err(|(e, _)| e)
+    ///     .and_then(|(first, mut rw)|{
+    ///         assert_eq!(b"123", first.unwrap().as_ref());
+    ///         assert_eq!(b"123".as_ref(), rw.rd.as_ref());
+    ///         Ok(())
+    ///     }).map_err(|e| eprintln!("{}", e));
+    ///     tokio::spawn(f);
     ///
     /// ```
     fn fill_read_buf(&mut self) -> Poll<(), tokio::io::Error> {
@@ -192,6 +204,28 @@ impl Stream for ReadWrite {
     }
 }
 
+impl Sink for ReadWrite {
+    type SinkItem = JsonMsg;
+    type SinkError = ();
+
+    fn start_send(&mut self, item: Self::SinkItem)
+                  -> StartSend<Self::SinkItem, Self::SinkError>
+    {
+        Ok(AsyncSink::Ready)
+    }
+
+    fn poll_complete(&mut self) -> Poll<(), Self::SinkError> {
+        match self.poll_flush().unwrap() {
+            Async::Ready(_) => Ok(Async::Ready(())),
+            Async::NotReady => Ok(Async::NotReady),
+        }
+    }
+
+    fn close(&mut self) -> Poll<(), Self::SinkError> {
+        self.poll_complete()
+    }
+}
+
 
 
 #[cfg(test)]
@@ -213,7 +247,7 @@ mod tests {
         let server = listener.incoming().take(1)
             .for_each(move |sock| {
                 let mut rw = ReadWrite::new(sock);
-                rw.buffer(b"123".as_ref());
+                rw.buffer_u8(b"123".as_ref());
 
                 let mut b_m = BytesMut::new();
                 b_m.reserve(3);
@@ -237,18 +271,21 @@ mod tests {
         let listener = TcpListener::bind(&addr).unwrap();
         println!("listening");
 
-        let mut conn = TcpStream::connect(&addr)
-            .map(|mut s| s).wait().unwrap();
+        let mut conn = std::net::TcpStream::connect("localhost:3002").unwrap();
+        conn.write_all("123\r\n123".as_bytes());
 
         let server = listener.incoming().take(1)
             .for_each(move |sock| {
-                let mut rw = ReadWrite::new(sock);
+                //                         this calls fill_read_buffer
+                let f = ReadWrite::new(sock).into_future()
+                    .map_err(|(e, _)| e)
+                    .and_then(|(first, mut rw)|{
+                        assert_eq!(b"123", first.unwrap().as_ref());
 
-                let amt = conn.write(b"123\r\n".as_ref()).unwrap();
-
-                rw.fill_read_buf();
-                println!("read buf: {}", String::from_utf8_lossy(rw.rd.as_ref()));
-
+                        assert_eq!(b"123".as_ref(), rw.rd.as_ref());
+                        Ok(())
+                    }).map_err(|e| eprintln!("{}", e));
+                tokio::spawn(f);
                 Ok(())
             })
             .map_err(|e| {
