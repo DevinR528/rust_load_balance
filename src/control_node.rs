@@ -16,16 +16,19 @@ use serde_json;
 
 use tokio::codec::{BytesCodec, Decoder, Encoder, Framed};
 use tokio::net::{TcpListener, TcpStream};
+use tokio::io::{ AsyncWrite, AsyncRead };
 use tokio::prelude::*;
 
 use super::server_node::{ NodeMsg, ServerNode, NodeState, NodeSender };
 use super::utils::*;
+
 use tokio::reactor::Handle;
 use tokio::io::ErrorKind;
-use std::sync::mpsc::TrySendError;
+use std::sync::mpsc::TrySendError::{ Disconnected, Full };
 
 
-#[derive(Debug, Clone, )]
+struct CurrentNodeTx(NodeSender);
+
 pub struct ControlNode {
     /// Reciving end of msg from node
     recv: mpsc::Receiver<NodeMsg>,
@@ -38,6 +41,8 @@ pub struct ControlNode {
     // TOD0
     /// stored msg from node probably dont need
     msg_from_node: Option<NodeMsg>,
+    /// holds temp node tx for ease of use
+    curr_node_tx: Option<CurrentNodeTx>,
 }
 
 impl ControlNode {
@@ -49,6 +54,7 @@ impl ControlNode {
             load_order: VecDeque::new(),
             // used by stream and sink
             msg_from_node: None,
+            curr_node_tx: None,
         }
     }
 
@@ -65,6 +71,10 @@ impl ControlNode {
 
     }
 
+    pub fn set_curr(&mut self, n: NodeSender) {
+        self.curr_node_tx = Some(CurrentNodeTx(n))
+    }
+
     pub fn send_one(&mut self, s_addr: &SocketAddr, msg: NodeMsg)
         -> Result<(), mpsc::TrySendError<NodeMsg>>
     {
@@ -73,11 +83,11 @@ impl ControlNode {
         tx.lock().unwrap().try_send(msg)
     }
 
-    pub fn send_all(&self, msg: NodeMsg) -> Result<(), mpsc::SendError<NodeMsg>>{
+    pub fn send_all(&self, msg: NodeMsg) -> Result<(), mpsc::TrySendError<NodeMsg>>{
 
-        let n: Vec<Result<(), mpsc::SendError<NodeMsg>>> =
+        let n: Vec<Result<(), mpsc::TrySendError<NodeMsg>>> =
             self.nodes.iter()
-                .map(|(addr, (s, _r))| s.send(msg.to_owned()))
+                .map(|(addr, s)| s.lock().unwrap().try_send(msg.to_owned()))
                 .filter(|res| res.is_err())
                 .collect();
 
@@ -94,7 +104,7 @@ impl ControlNode {
     }
 
     pub fn find_node(&mut self)
-        -> Result<&NodeSender, impl std::error::Error>
+        -> Result<NodeSender, impl std::error::Error>
     {
         let err = std::io::Error::new(ErrorKind::AddrNotAvailable, "Not found");
         let addr = match self.load_order.front() {
@@ -107,38 +117,42 @@ impl ControlNode {
             None => return Err(err),
         };
         match self.nodes.get_mut(&addr) {
-            Some(tx) => Ok(tx),
+            Some(tx) => Ok(tx.clone()),
             None => Err(err)
         }
     }
 
-    pub fn send_to_node(&mut self, s: TcpStream)
-        -> Result<(), impl std::error::Error>
-    {
-        let err = std::io::Error::new(ErrorKind::BrokenPipe, "Full or Disconected");
-        let res = self.find_node()
-            .map_err(|e| err)
-            .map(|tx| {
-                let addr = "127.0.0.0.1:4567".parse::<SocketAddr>().expect("not good socket addr");
-                tx.lock().unwrap().try_send(NodeMsg { id: addr, count: 13})
-                    .map_err(|e| err)
-                    .map(|res| res)
-            });
-        Ok(())
-    }
+//    pub fn send_to_node(&mut self, s: TcpStream)
+//        -> Result<(), impl std::error::Error>
+//    {
+//        let err = std::io::Error::new(ErrorKind::BrokenPipe, "Full or Disconected");
+//        let res = self.find_node()
+//            .map_err(|e| err)
+//            .map(|tx| {
+//                let addr = "127.0.0.0.1:4567".parse::<SocketAddr>().expect("not good socket addr");
+//                tx.lock().unwrap().try_send(NodeMsg { id: addr, count: 13})
+//                    .map_err(|e| err)
+//                    .map(|res| res)
+//            });
+//        Ok(())
+//    }
 }
 
 impl Stream for ControlNode {
 
     type Item = NodeMsg;
-    type Error = tokio::io::Error;
+    type Error = ();
 
     fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
         match self.recv.poll() {
             Ok(Async::Ready(Some(n))) => {
-                println!("[Poll] {}", n);
+                println!("[Poll] {:#?}", n);
 
-                break Ok(Async::Ready(Some(n)))
+                Ok(Async::Ready(Some(n)))
+            },
+            Ok(Async::Ready(None)) => {
+                eprintln!("[poll Disconn] disconnected in poll");
+                Ok(Async::Ready(None))
             },
             Ok(Async::NotReady) => Ok(Async::NotReady),
             Err(e) => Err(From::from(e)),
@@ -154,24 +168,26 @@ impl Sink for ControlNode {
     fn start_send(&mut self, item: Self::SinkItem)
                   -> StartSend<Self::SinkItem, Self::SinkError>
     {
-        if self.msg_to_node == None {
+        if self.load_order.is_empty() {
+            println!("Load order empty");
             return Ok(AsyncSink::NotReady(item));
         }
 
         // get best node
         match self.find_node() {
             Ok(tx) => {
+                self.set_curr(tx);
                 // TODO
                 // try to send item to node eventually this will be conn?
-                match tx.lock().unwrap().try_send(item) {
+                match tx.clone().lock().unwrap().try_send(item.clone()) {
                     Ok(()) => Ok(AsyncSink::Ready),
-                    Err(err) => match err {
-                        std::sync::mpsc::TrySendError::Full(nm) | //.
-                        std::sync::mpsc::TrySendError::Disconnected(nm) => {
-                            // TODO
-                            eprintln!("[full or disconn] {nm}", nm)
-                        },
-                        _ => eprintln!("[match Err try_send]")
+                    Err(err) => {
+                        if err.is_disconnected() {
+                            eprintln!("[Error in try send] Disconnected")
+                        } else {
+                            eprintln!("[Error in try send] Full")
+                        }
+                        Err(())
                     },
                 }
             },
@@ -183,9 +199,10 @@ impl Sink for ControlNode {
     }
 
     fn poll_complete(&mut self) -> Poll<(), Self::SinkError> {
-        match self.poll_flush().unwrap() {
-            Async::Ready(_) => Ok(Async::Ready(())),
-            Async::NotReady => Ok(Async::NotReady),
+        match self.curr_node_tx.unwrap().0.lock().unwrap()
+            .poll_complete().unwrap() {
+                Async::Ready(_) => Ok(Async::Ready(())),
+                Async::NotReady => Ok(Async::NotReady),
         }
     }
 
@@ -234,10 +251,21 @@ mod tests {
 
         }
 
-        listener.incoming()
+        let mut count = 0;
+        let serv = listener.incoming()
             .for_each(|sock| {
-                control.lock().unwrap().send_to_node(sock);
-            })
+                let addr = "127.0.0.0.1:4567".parse::<SocketAddr>()
+                    .expect("not good socket addr");
+
+                control.frame(sock).split();
+                control.lock().unwrap()
+                    .start_send(NodeMsg {
+                        id: addr,
+                        count,
+                    });
+            });
+
+        tokio::run(serv);
     }
 
 }
